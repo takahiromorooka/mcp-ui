@@ -1,0 +1,8 @@
+packages:
+  - packages/*
+onlyBuiltDependencies:
+  - '@j178/prek'
+  - '@modelcontextprotocol/ext-apps'
+  - esbuild
+  - sharp
+  - workerd

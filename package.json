@@ -1,0 +1,28 @@
+{
+	"name": "mcp-ui-ad-campaigns",
+	"private": true,
+	"scripts": {
+		"dev": "pnpm -r --parallel dev",
+		"dev:api": "pnpm --filter @mcp-ui-demo/api dev",
+		"dev:mcp": "pnpm --filter @mcp-ui-demo/mcp-server dev",
+		"dev:ui": "pnpm --filter @mcp-ui-demo/ui dev",
+		"build": "pnpm --filter @mcp-ui-demo/ui build && pnpm --filter @mcp-ui-demo/mcp-server build:ui",
+		"build:ui": "pnpm --filter @mcp-ui-demo/ui build",
+		"check": "biome check .",
+		"check:fix": "biome check --write .",
+		"format": "biome format --write .",
+		"lint": "biome lint .",
+		"knip": "knip",
+		"typecheck": "pnpm -r typecheck",
+		"prepare": "prek install"
+	},
+	"devDependencies": {
+		"@j178/prek": "^0.3.0",
+		"knip": "^5.0.0",
+		"typescript": "^5.7.0"
+	},
+	"packageManager": "pnpm@10.7.0",
+	"engines": {
+		"node": ">=20"
+	}
+}
