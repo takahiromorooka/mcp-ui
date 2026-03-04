@@ -58,6 +58,23 @@ Mock Campaign Data (25件)
 1. `pnpm build:ui` — Viteがuiパッケージを`dist/index.html`（単一ファイル）にビルド
 2. `pnpm build` — `embed-ui.mjs`が上記HTMLを読み取り`mcp-server/src/ui/html.ts`を生成
 
+## ローカル検証（ChatGPT等の外部ホスト）
+
+外部ホストからローカルのMCPサーバーに接続するにはHTTPS URLが必要。Cloudflare Tunnelで公開する。
+
+```bash
+# 1. UIをビルドしてMCPサーバーに埋め込む
+pnpm build
+
+# 2. ローカルサーバー起動（API:8787, MCP:8788）
+pnpm dev
+
+# 3. 別ターミナルでMCPサーバーをHTTPS公開
+cloudflared tunnel --url http://localhost:8788
+```
+
+発行されたHTTPS URL（例: `https://xxx.trycloudflare.com`）をChatGPT等のMCPサーバー設定に登録する。URLはトンネル再起動のたびに変わる。
+
 ## コード規約
 
 - **Biome** — フォーマッタ兼リンター。タブインデント、行幅100、シングルクォート、セミコロンなし
