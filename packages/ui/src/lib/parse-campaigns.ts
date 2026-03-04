@@ -1,7 +1,8 @@
 interface Campaign {
 	id: string
 	name: string
-	platform: string
+	mediaId: string
+	mediaName: string
 	status: string
 	budget: number
 	impressions: number

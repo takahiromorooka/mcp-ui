@@ -1,14 +1,16 @@
 import { Hono } from 'hono'
 import { mockCampaigns } from '../data/mock-campaigns'
-import type { Platform, Status } from '../types/campaign'
+import { mockMedia } from '../data/mock-media'
+import type { CampaignWithMedia, Status } from '../types/campaign'
+
+const mediaMap = new Map(mockMedia.map((m) => [m.id, m.name]))
 
 const campaignRoutes = new Hono()
 
 campaignRoutes.get('/', (c) => {
-	const platform = c.req.query('platform') as Platform | undefined
+	const mediaId = c.req.query('media_id')
 	const status = c.req.query('status') as Status | undefined
 	const search = c.req.query('search')
-
 	const ids = c.req.query('ids')
 
 	let filtered = mockCampaigns
@@ -18,8 +20,8 @@ campaignRoutes.get('/', (c) => {
 		filtered = filtered.filter((camp) => idSet.has(camp.id))
 	}
 
-	if (platform) {
-		filtered = filtered.filter((camp) => camp.platform === platform)
+	if (mediaId) {
+		filtered = filtered.filter((camp) => camp.mediaId === mediaId)
 	}
 
 	if (status) {
@@ -31,9 +33,14 @@ campaignRoutes.get('/', (c) => {
 		filtered = filtered.filter((camp) => camp.name.toLowerCase().includes(query))
 	}
 
+	const campaigns: CampaignWithMedia[] = filtered.map((camp) => ({
+		...camp,
+		mediaName: mediaMap.get(camp.mediaId) ?? camp.mediaId,
+	}))
+
 	return c.json({
-		campaigns: filtered,
-		total: filtered.length,
+		campaigns,
+		total: campaigns.length,
 	})
 })
 

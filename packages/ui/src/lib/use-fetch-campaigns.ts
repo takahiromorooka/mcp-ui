@@ -5,7 +5,8 @@ import { extractTextFromContent, parseCampaigns } from './parse-campaigns'
 interface Campaign {
 	id: string
 	name: string
-	platform: string
+	mediaId: string
+	mediaName: string
 	status: string
 	budget: number
 	impressions: number
@@ -17,7 +18,7 @@ interface Campaign {
 
 interface FetchFilters {
 	search?: string
-	platform?: string
+	media_id?: string
 	status?: string
 }
 
@@ -37,7 +38,7 @@ export function useFetchCampaigns(app: App | null) {
 			try {
 				const args: Record<string, string> = {}
 				if (filters.search) args.search = filters.search
-				if (filters.platform) args.platform = filters.platform
+				if (filters.media_id) args.media_id = filters.media_id
 				if (filters.status) args.status = filters.status
 
 				const result = await app.callServerTool({

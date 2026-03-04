@@ -3,6 +3,7 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { Hono } from 'hono'
 import { registerAnalyzeCampaignsTool } from './tools/analyze-campaigns'
 import { registerListCampaignsTool } from './tools/list-campaigns'
+import { registerListMediaTool } from './tools/list-media'
 
 type Bindings = {
 	API_BASE_URL: string
@@ -21,6 +22,7 @@ app.all('/mcp', async (c) => {
 	const apiBaseUrl = c.env.API_BASE_URL || 'http://localhost:8787'
 
 	if (!server.isConnected()) {
+		registerListMediaTool(server, apiBaseUrl)
 		registerListCampaignsTool(server, apiBaseUrl)
 		registerAnalyzeCampaignsTool(server, apiBaseUrl)
 		await server.connect(transport)

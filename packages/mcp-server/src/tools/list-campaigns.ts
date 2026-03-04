@@ -35,12 +35,9 @@ export function registerListCampaignsTool(server: McpServer, apiBaseUrl: string)
 		{
 			title: 'List Ad Campaigns',
 			description:
-				'Search and filter advertising campaigns across platforms. Returns campaign data with an interactive search/filter UI.',
+				'Search and filter advertising campaigns. Use list_media tool first to get available media IDs. Returns campaign data with an interactive search/filter UI.',
 			inputSchema: {
-				platform: z
-					.enum(['Google', 'Instagram', 'TikTok', 'Facebook', 'X', 'YouTube'])
-					.optional()
-					.describe('Filter by advertising platform'),
+				media_id: z.string().optional().describe('Filter by media ID (e.g. media-001)'),
 				status: z
 					.enum(['active', 'paused', 'completed'])
 					.optional()
@@ -51,9 +48,9 @@ export function registerListCampaignsTool(server: McpServer, apiBaseUrl: string)
 				ui: { resourceUri: RESOURCE_URI },
 			},
 		},
-		async ({ platform, status, search }) => {
+		async ({ media_id, status, search }) => {
 			const params = new URLSearchParams()
-			if (platform) params.set('platform', platform)
+			if (media_id) params.set('media_id', media_id)
 			if (status) params.set('status', status)
 			if (search) params.set('search', search)
 

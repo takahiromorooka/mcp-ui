@@ -6,10 +6,16 @@ import { CampaignTable } from './components/campaign-table'
 import { FilterBar } from './components/filter-bar'
 import { extractTextFromContent, parseCampaigns } from './lib/parse-campaigns'
 
+interface Media {
+	id: string
+	name: string
+}
+
 interface Campaign {
 	id: string
 	name: string
-	platform: string
+	mediaId: string
+	mediaName: string
 	status: string
 	budget: number
 	impressions: number
@@ -24,7 +30,7 @@ type AnalysisData = {
 	campaigns: {
 		id: string
 		name: string
-		platform: string
+		mediaName: string
 		ctr: number
 		cvr: number
 		cpc: number
@@ -36,9 +42,10 @@ type AnalysisData = {
 }
 
 export function App() {
+	const [media, setMedia] = useState<Media[]>([])
 	const [campaigns, setCampaigns] = useState<Campaign[]>([])
 	const [filterName, setFilterName] = useState('')
-	const [filterPlatform, setFilterPlatform] = useState('')
+	const [filterMediaId, setFilterMediaId] = useState('')
 	const [filterStatus, setFilterStatus] = useState('')
 	const [selected, setSelected] = useState<Set<string>>(new Set())
 	const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null)
@@ -97,22 +104,44 @@ export function App() {
 		},
 	})
 
-	// (3) callServerTool: 接続後に能動的にデータを取得
+	// (3) 接続後に媒体一覧とキャンペーンデータを取得
 	useEffect(() => {
-		if (!app || !isConnected || loadedRef.current) return
+		if (!app || !isConnected) return
+
+		// 媒体一覧を取得
 		app
-			.callServerTool({ name: 'list_campaigns', arguments: {} })
+			.callServerTool({ name: 'list_media', arguments: {} })
 			.then((result) => {
-				if (!result.isError) handleToolResult(result)
+				if (!result.isError) {
+					const text = extractTextFromContent(result.content)
+					if (text) {
+						try {
+							const parsed = JSON.parse(text)
+							if (parsed.media && Array.isArray(parsed.media)) {
+								setMedia(parsed.media)
+							}
+						} catch {}
+					}
+				}
 			})
 			.catch(() => {})
+
+		// キャンペーンデータを取得
+		if (!loadedRef.current) {
+			app
+				.callServerTool({ name: 'list_campaigns', arguments: {} })
+				.then((result) => {
+					if (!result.isError) handleToolResult(result)
+				})
+				.catch(() => {})
+		}
 	}, [app, isConnected, handleToolResult])
 
 	const filtered = campaigns.filter((c) => {
 		const matchesName = filterName === '' || c.name.toLowerCase().includes(filterName.toLowerCase())
-		const matchesPlatform = filterPlatform === '' || c.platform === filterPlatform
+		const matchesMedia = filterMediaId === '' || c.mediaId === filterMediaId
 		const matchesStatus = filterStatus === '' || c.status === filterStatus
-		return matchesName && matchesPlatform && matchesStatus
+		return matchesName && matchesMedia && matchesStatus
 	})
 
 	const toggleSelect = useCallback((id: string) => {
@@ -167,11 +196,12 @@ export function App() {
 		<div className="mx-auto max-w-[1200px] p-4">
 			<h1 className="mb-4 text-lg font-semibold">キャンペーンダッシュボード</h1>
 			<FilterBar
+				media={media}
 				filterName={filterName}
-				filterPlatform={filterPlatform}
+				filterMediaId={filterMediaId}
 				filterStatus={filterStatus}
 				onNameChange={setFilterName}
-				onPlatformChange={setFilterPlatform}
+				onMediaIdChange={setFilterMediaId}
 				onStatusChange={setFilterStatus}
 			/>
 			<div className="mb-2 text-xs text-muted-foreground">

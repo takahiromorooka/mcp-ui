@@ -6,7 +6,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 interface Campaign {
 	id: string
 	name: string
-	platform: string
+	mediaId: string
+	mediaName: string
 	status: string
 	budget: number
 	impressions: number
@@ -23,13 +24,13 @@ interface CampaignTableProps {
 	onToggleAll: () => void
 }
 
-const platformVariantMap: Record<string, BadgeProps['variant']> = {
-	Google: 'google',
-	Instagram: 'instagram',
-	TikTok: 'tiktok',
-	Facebook: 'facebook',
-	X: 'x',
-	YouTube: 'youtube',
+const mediaVariantMap: Record<string, BadgeProps['variant']> = {
+	'Google Ads': 'google',
+	'Instagram Ads': 'instagram',
+	'TikTok Ads': 'tiktok',
+	'Facebook Ads': 'facebook',
+	'X Ads': 'x',
+	'YouTube Ads': 'youtube',
 }
 
 const statusVariantMap: Record<string, BadgeProps['variant']> = {
@@ -58,12 +59,6 @@ export function CampaignTable({
 	onToggleSelect,
 	onToggleAll,
 }: CampaignTableProps) {
-	console.log('[DEBUG] CampaignTable render', {
-		campaignsType: typeof campaigns,
-		isArray: Array.isArray(campaigns),
-		length: Array.isArray(campaigns) ? campaigns.length : 'N/A',
-		value: campaigns,
-	})
 	const items = Array.isArray(campaigns) ? campaigns : []
 	const allSelected = items.length > 0 && selected.size === items.length
 
@@ -108,9 +103,7 @@ export function CampaignTable({
 								</TableCell>
 								<TableCell className="max-w-[280px] truncate font-medium">{c.name}</TableCell>
 								<TableCell>
-									<Badge variant={platformVariantMap[c.platform] ?? 'secondary'}>
-										{c.platform}
-									</Badge>
+									<Badge variant={mediaVariantMap[c.mediaName] ?? 'secondary'}>{c.mediaName}</Badge>
 								</TableCell>
 								<TableCell>
 									<Badge variant={statusVariantMap[c.status] ?? 'outline'}>

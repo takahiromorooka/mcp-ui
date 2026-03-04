@@ -1,7 +1,12 @@
+export interface Media {
+	id: string
+	name: string
+}
+
 export interface Campaign {
 	id: string
 	name: string
-	platform: Platform
+	mediaId: string
 	status: Status
 	budget: number
 	impressions: number
@@ -11,5 +16,8 @@ export interface Campaign {
 	endDate: string
 }
 
-export type Platform = 'Google' | 'Instagram' | 'TikTok' | 'Facebook' | 'X' | 'YouTube'
+export interface CampaignWithMedia extends Campaign {
+	mediaName: string
+}
+
 export type Status = 'active' | 'paused' | 'completed'
