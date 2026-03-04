@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "wrangler dev --port 8799",
+		"dev": "wrangler dev --inspector-port 9230",
 		"deploy": "wrangler deploy",
 		"build:ui": "node scripts/embed-ui.mjs",
 		"typecheck": "tsc --noEmit"

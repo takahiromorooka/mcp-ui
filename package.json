@@ -14,9 +14,14 @@
 		"lint": "biome lint .",
 		"knip": "knip",
 		"typecheck": "pnpm -r typecheck",
+		"pm2:start": "pnpm build && pm2 start ecosystem.config.cjs",
+		"pm2:stop": "pm2 stop ecosystem.config.cjs",
+		"pm2:status": "pm2 status",
+		"pm2:logs": "pm2 logs",
 		"prepare": "prek install"
 	},
 	"devDependencies": {
+		"@biomejs/biome": "^2.4.5",
 		"@j178/prek": "^0.3.0",
 		"knip": "^5.0.0",
 		"typescript": "^5.7.0"
