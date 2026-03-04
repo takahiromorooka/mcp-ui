@@ -58,7 +58,14 @@ export function CampaignTable({
 	onToggleSelect,
 	onToggleAll,
 }: CampaignTableProps) {
-	const allSelected = campaigns.length > 0 && selected.size === campaigns.length
+	console.log('[DEBUG] CampaignTable render', {
+		campaignsType: typeof campaigns,
+		isArray: Array.isArray(campaigns),
+		length: Array.isArray(campaigns) ? campaigns.length : 'N/A',
+		value: campaigns,
+	})
+	const items = Array.isArray(campaigns) ? campaigns : []
+	const allSelected = items.length > 0 && selected.size === items.length
 
 	return (
 		<div className="rounded-lg border border-border">
@@ -83,14 +90,14 @@ export function CampaignTable({
 					</TableRow>
 				</TableHeader>
 				<TableBody>
-					{campaigns.length === 0 ? (
+					{items.length === 0 ? (
 						<TableRow>
 							<TableCell colSpan={9} className="h-24 text-center text-muted-foreground">
 								条件に一致するキャンペーンがありません
 							</TableCell>
 						</TableRow>
 					) : (
-						campaigns.map((c) => (
+						items.map((c) => (
 							<TableRow key={c.id} data-state={selected.has(c.id) ? 'selected' : undefined}>
 								<TableCell>
 									<Checkbox

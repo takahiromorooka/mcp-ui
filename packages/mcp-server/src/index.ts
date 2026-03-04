@@ -1,6 +1,7 @@
 import { StreamableHTTPTransport } from '@hono/mcp'
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js'
 import { Hono } from 'hono'
+import { registerAnalyzeCampaignsTool } from './tools/analyze-campaigns'
 import { registerListCampaignsTool } from './tools/list-campaigns'
 
 type Bindings = {
@@ -21,6 +22,7 @@ app.all('/mcp', async (c) => {
 
 	if (!server.isConnected()) {
 		registerListCampaignsTool(server, apiBaseUrl)
+		registerAnalyzeCampaignsTool(server, apiBaseUrl)
 		await server.connect(transport)
 	}
 

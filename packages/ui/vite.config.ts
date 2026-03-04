@@ -7,7 +7,7 @@ export default defineConfig({
 	plugins: [react(), tailwindcss(), viteSingleFile()],
 	build: {
 		outDir: 'dist',
-		target: 'esnext',
+		target: 'es2020',
 		minify: true,
 	},
 })

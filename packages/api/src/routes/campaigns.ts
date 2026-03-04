@@ -9,7 +9,14 @@ campaignRoutes.get('/', (c) => {
 	const status = c.req.query('status') as Status | undefined
 	const search = c.req.query('search')
 
+	const ids = c.req.query('ids')
+
 	let filtered = mockCampaigns
+
+	if (ids) {
+		const idSet = new Set(ids.split(',').map((id) => id.trim()))
+		filtered = filtered.filter((camp) => idSet.has(camp.id))
+	}
 
 	if (platform) {
 		filtered = filtered.filter((camp) => camp.platform === platform)
