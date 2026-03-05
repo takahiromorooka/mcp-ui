@@ -62,6 +62,12 @@ export function App() {
 	// ツール結果をパースしてstateにセットする共通処理
 	const handleToolResult = useCallback(
 		(params: { content?: unknown; structuredContent?: unknown }) => {
+			console.log('[DEBUG] handleToolResult', {
+				loaded: loadedRef.current,
+				hasContent: !!params.content,
+				hasStructured: !!params.structuredContent,
+				content: params.content,
+			})
 			if (loadedRef.current) return
 
 			const sc = params.structuredContent as { type?: string } | undefined
@@ -121,7 +127,8 @@ export function App() {
 	}, [app, isConnected, handleToolResult])
 
 	const filtered = campaigns.filter((c) => {
-		const matchesName = filterName === '' || c.name.toLowerCase().includes(filterName.toLowerCase())
+		const matchesName =
+			filterName === '' || (c.name ?? '').toLowerCase().includes(filterName.toLowerCase())
 		const matchesMedia = filterMediaId === '' || c.mediaId === filterMediaId
 		const matchesStatus = filterStatus === '' || c.status === filterStatus
 		return matchesName && matchesMedia && matchesStatus

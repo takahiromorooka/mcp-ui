@@ -45,11 +45,13 @@ const statusLabelMap: Record<string, string> = {
 	completed: '完了',
 }
 
-function formatBudget(n: number): string {
+function formatBudget(n: number | undefined): string {
+	if (n == null) return '-'
 	return `\u00a5${n.toLocaleString('ja-JP')}`
 }
 
-function formatNumber(n: number): string {
+function formatNumber(n: number | undefined): string {
+	if (n == null) return '-'
 	return n.toLocaleString('ja-JP')
 }
 
