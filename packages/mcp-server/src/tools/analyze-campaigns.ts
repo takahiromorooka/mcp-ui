@@ -69,6 +69,9 @@ export function registerAnalyzeCampaignsTool(server: McpServer, apiBaseUrl: stri
 			title: 'Analyze Ad Campaigns',
 			description:
 				'Analyze selected advertising campaigns. Calculates performance metrics (CTR, CVR, CPC) and returns chart data for visualization.',
+			annotations: {
+				readOnlyHint: true,
+			},
 			inputSchema: {
 				ids: z.string().describe('カンマ区切りのキャンペーンID'),
 			},
