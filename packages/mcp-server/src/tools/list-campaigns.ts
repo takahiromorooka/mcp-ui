@@ -35,7 +35,7 @@ export function registerListCampaignsTool(server: McpServer, apiBaseUrl: string)
 		{
 			title: 'List Ad Campaigns',
 			description:
-				'Search and filter advertising campaigns. Use list_media tool first to get available media IDs. Returns campaign data with an interactive search/filter UI.',
+				'Search and filter advertising campaigns across platforms. Returns campaign data with an interactive search/filter UI.',
 			inputSchema: {
 				media_id: z.string().optional().describe('Filter by media ID (e.g. media-001)'),
 				status: z
@@ -55,15 +55,18 @@ export function registerListCampaignsTool(server: McpServer, apiBaseUrl: string)
 			if (search) params.set('search', search)
 
 			const queryString = params.toString()
-			const url = `${apiBaseUrl}/api/campaigns${queryString ? `?${queryString}` : ''}`
-			const response = await fetch(url)
-			const data = await response.json()
+			const [campaignsRes, mediaRes] = await Promise.all([
+				fetch(`${apiBaseUrl}/api/campaigns${queryString ? `?${queryString}` : ''}`),
+				fetch(`${apiBaseUrl}/api/media`),
+			])
+			const campaignsData = (await campaignsRes.json()) as Record<string, unknown>
+			const mediaData = (await mediaRes.json()) as { media: unknown[] }
 
 			return {
 				content: [
 					{
 						type: 'text' as const,
-						text: JSON.stringify(data, null, 2),
+						text: JSON.stringify({ ...campaignsData, media: mediaData.media }, null, 2),
 					},
 				],
 				_meta: {

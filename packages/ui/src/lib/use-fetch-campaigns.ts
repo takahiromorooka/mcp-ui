@@ -1,6 +1,6 @@
 import type { App } from '@modelcontextprotocol/ext-apps'
 import { useCallback, useRef, useState } from 'react'
-import { extractTextFromContent, parseCampaigns } from './parse-campaigns'
+import { extractTextFromContent, parseCampaignsAndMedia } from './parse-campaigns'
 
 interface Campaign {
 	id: string
@@ -54,7 +54,10 @@ export function useFetchCampaigns(app: App | null) {
 				}
 
 				const text = extractTextFromContent(result.content)
-				if (text) return parseCampaigns(text)
+				if (text) {
+					const parsed = parseCampaignsAndMedia(text)
+					return parsed?.campaigns ?? null
+				}
 				return null
 			} catch (err) {
 				if (id !== fetchIdRef.current) return null

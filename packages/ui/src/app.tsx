@@ -4,7 +4,7 @@ import { ActionBar } from './components/action-bar'
 import { AnalysisChart } from './components/analysis-chart'
 import { CampaignTable } from './components/campaign-table'
 import { FilterBar } from './components/filter-bar'
-import { extractTextFromContent, parseCampaigns } from './lib/parse-campaigns'
+import { extractTextFromContent, parseCampaignsAndMedia } from './lib/parse-campaigns'
 
 interface Media {
 	id: string
@@ -53,8 +53,10 @@ export function App() {
 
 	// Refで最新のsetterを保持（クロージャから安全に参照するため）
 	const setCampaignsRef = useRef(setCampaigns)
+	const setMediaRef = useRef(setMedia)
 	const setAnalysisDataRef = useRef(setAnalysisData)
 	setCampaignsRef.current = setCampaigns
+	setMediaRef.current = setMedia
 	setAnalysisDataRef.current = setAnalysisData
 
 	// ツール結果をパースしてstateにセットする共通処理
@@ -70,9 +72,12 @@ export function App() {
 
 			const text = extractTextFromContent(params.content)
 			if (text) {
-				const arr = parseCampaigns(text)
-				if (arr) {
-					setCampaignsRef.current(arr)
+				const result = parseCampaignsAndMedia(text)
+				if (result) {
+					setCampaignsRef.current(result.campaigns)
+					if (result.media.length > 0) {
+						setMediaRef.current(result.media)
+					}
 					loadedRef.current = true
 				}
 			}
@@ -104,37 +109,15 @@ export function App() {
 		},
 	})
 
-	// (3) 接続後に媒体一覧とキャンペーンデータを取得
+	// (3) callServerTool: 接続後に能動的にデータを取得
 	useEffect(() => {
-		if (!app || !isConnected) return
-
-		// 媒体一覧を取得
+		if (!app || !isConnected || loadedRef.current) return
 		app
-			.callServerTool({ name: 'list_media', arguments: {} })
+			.callServerTool({ name: 'list_campaigns', arguments: {} })
 			.then((result) => {
-				if (!result.isError) {
-					const text = extractTextFromContent(result.content)
-					if (text) {
-						try {
-							const parsed = JSON.parse(text)
-							if (parsed.media && Array.isArray(parsed.media)) {
-								setMedia(parsed.media)
-							}
-						} catch {}
-					}
-				}
+				if (!result.isError) handleToolResult(result)
 			})
 			.catch(() => {})
-
-		// キャンペーンデータを取得
-		if (!loadedRef.current) {
-			app
-				.callServerTool({ name: 'list_campaigns', arguments: {} })
-				.then((result) => {
-					if (!result.isError) handleToolResult(result)
-				})
-				.catch(() => {})
-		}
 	}, [app, isConnected, handleToolResult])
 
 	const filtered = campaigns.filter((c) => {
