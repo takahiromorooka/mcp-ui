@@ -12,7 +12,7 @@ import {
 interface CampaignMetrics {
 	id: string
 	name: string
-	platform: string
+	mediaName: string
 	ctr: number
 	cvr: number
 	cpc: number

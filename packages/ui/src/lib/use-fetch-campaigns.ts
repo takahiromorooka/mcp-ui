@@ -1,11 +1,12 @@
 import type { App } from '@modelcontextprotocol/ext-apps'
 import { useCallback, useRef, useState } from 'react'
-import { extractTextFromContent, parseCampaigns } from './parse-campaigns'
+import { extractTextFromContent, parseCampaignsAndMedia } from './parse-campaigns'
 
 interface Campaign {
 	id: string
 	name: string
-	platform: string
+	mediaId: string
+	mediaName: string
 	status: string
 	budget: number
 	impressions: number
@@ -17,7 +18,7 @@ interface Campaign {
 
 interface FetchFilters {
 	search?: string
-	platform?: string
+	media_id?: string
 	status?: string
 }
 
@@ -37,7 +38,7 @@ export function useFetchCampaigns(app: App | null) {
 			try {
 				const args: Record<string, string> = {}
 				if (filters.search) args.search = filters.search
-				if (filters.platform) args.platform = filters.platform
+				if (filters.media_id) args.media_id = filters.media_id
 				if (filters.status) args.status = filters.status
 
 				const result = await app.callServerTool({
@@ -53,7 +54,10 @@ export function useFetchCampaigns(app: App | null) {
 				}
 
 				const text = extractTextFromContent(result.content)
-				if (text) return parseCampaigns(text)
+				if (text) {
+					const parsed = parseCampaignsAndMedia(text)
+					return parsed?.campaigns ?? null
+				}
 				return null
 			} catch (err) {
 				if (id !== fetchIdRef.current) return null

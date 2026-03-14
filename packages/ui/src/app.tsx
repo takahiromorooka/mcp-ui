@@ -4,12 +4,18 @@ import { ActionBar } from './components/action-bar'
 import { AnalysisChart } from './components/analysis-chart'
 import { CampaignTable } from './components/campaign-table'
 import { FilterBar } from './components/filter-bar'
-import { extractTextFromContent, parseCampaigns } from './lib/parse-campaigns'
+import { extractTextFromContent, parseCampaignsAndMedia } from './lib/parse-campaigns'
+
+interface Media {
+	id: string
+	name: string
+}
 
 interface Campaign {
 	id: string
 	name: string
-	platform: string
+	mediaId: string
+	mediaName: string
 	status: string
 	budget: number
 	impressions: number
@@ -24,7 +30,7 @@ type AnalysisData = {
 	campaigns: {
 		id: string
 		name: string
-		platform: string
+		mediaName: string
 		ctr: number
 		cvr: number
 		cpc: number
@@ -36,9 +42,10 @@ type AnalysisData = {
 }
 
 export function App() {
+	const [media, setMedia] = useState<Media[]>([])
 	const [campaigns, setCampaigns] = useState<Campaign[]>([])
 	const [filterName, setFilterName] = useState('')
-	const [filterPlatform, setFilterPlatform] = useState('')
+	const [filterMediaId, setFilterMediaId] = useState('')
 	const [filterStatus, setFilterStatus] = useState('')
 	const [selected, setSelected] = useState<Set<string>>(new Set())
 	const [analysisData, setAnalysisData] = useState<AnalysisData | null>(null)
@@ -46,13 +53,21 @@ export function App() {
 
 	// Refで最新のsetterを保持（クロージャから安全に参照するため）
 	const setCampaignsRef = useRef(setCampaigns)
+	const setMediaRef = useRef(setMedia)
 	const setAnalysisDataRef = useRef(setAnalysisData)
 	setCampaignsRef.current = setCampaigns
+	setMediaRef.current = setMedia
 	setAnalysisDataRef.current = setAnalysisData
 
 	// ツール結果をパースしてstateにセットする共通処理
 	const handleToolResult = useCallback(
 		(params: { content?: unknown; structuredContent?: unknown }) => {
+			console.log('[DEBUG] handleToolResult', {
+				loaded: loadedRef.current,
+				hasContent: !!params.content,
+				hasStructured: !!params.structuredContent,
+				content: params.content,
+			})
 			if (loadedRef.current) return
 
 			const sc = params.structuredContent as { type?: string } | undefined
@@ -63,9 +78,12 @@ export function App() {
 
 			const text = extractTextFromContent(params.content)
 			if (text) {
-				const arr = parseCampaigns(text)
-				if (arr) {
-					setCampaignsRef.current(arr)
+				const result = parseCampaignsAndMedia(text)
+				if (result) {
+					setCampaignsRef.current(result.campaigns)
+					if (result.media.length > 0) {
+						setMediaRef.current(result.media)
+					}
 					loadedRef.current = true
 				}
 			}
@@ -109,10 +127,11 @@ export function App() {
 	}, [app, isConnected, handleToolResult])
 
 	const filtered = campaigns.filter((c) => {
-		const matchesName = filterName === '' || c.name.toLowerCase().includes(filterName.toLowerCase())
-		const matchesPlatform = filterPlatform === '' || c.platform === filterPlatform
+		const matchesName =
+			filterName === '' || (c.name ?? '').toLowerCase().includes(filterName.toLowerCase())
+		const matchesMedia = filterMediaId === '' || c.mediaId === filterMediaId
 		const matchesStatus = filterStatus === '' || c.status === filterStatus
-		return matchesName && matchesPlatform && matchesStatus
+		return matchesName && matchesMedia && matchesStatus
 	})
 
 	const toggleSelect = useCallback((id: string) => {
@@ -167,11 +186,12 @@ export function App() {
 		<div className="mx-auto max-w-[1200px] p-4">
 			<h1 className="mb-4 text-lg font-semibold">キャンペーンダッシュボード</h1>
 			<FilterBar
+				media={media}
 				filterName={filterName}
-				filterPlatform={filterPlatform}
+				filterMediaId={filterMediaId}
 				filterStatus={filterStatus}
 				onNameChange={setFilterName}
-				onPlatformChange={setFilterPlatform}
+				onMediaIdChange={setFilterMediaId}
 				onStatusChange={setFilterStatus}
 			/>
 			<div className="mb-2 text-xs text-muted-foreground">

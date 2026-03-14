@@ -4,7 +4,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-001',
 		name: 'Google検索 - サマーセール2025',
-		platform: 'Google',
+		mediaId: 'media-001',
 		status: 'active',
 		budget: 3000000,
 		impressions: 4500000,
@@ -16,7 +16,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-002',
 		name: 'Instagram Reels - 新商品ローンチ',
-		platform: 'Instagram',
+		mediaId: 'media-002',
 		status: 'active',
 		budget: 1500000,
 		impressions: 2800000,
@@ -28,7 +28,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-003',
 		name: 'TikTok チャレンジ - Z世代リーチ',
-		platform: 'TikTok',
+		mediaId: 'media-003',
 		status: 'active',
 		budget: 2000000,
 		impressions: 5000000,
@@ -40,7 +40,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-004',
 		name: 'Facebook リード獲得 - BtoB',
-		platform: 'Facebook',
+		mediaId: 'media-004',
 		status: 'paused',
 		budget: 800000,
 		impressions: 620000,
@@ -52,7 +52,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-005',
 		name: 'X プロモーション - ブランド認知',
-		platform: 'X',
+		mediaId: 'media-005',
 		status: 'active',
 		budget: 500000,
 		impressions: 1200000,
@@ -64,7 +64,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-006',
 		name: 'YouTube プレロール - チュートリアル',
-		platform: 'YouTube',
+		mediaId: 'media-006',
 		status: 'completed',
 		budget: 4000000,
 		impressions: 3200000,
@@ -76,7 +76,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-007',
 		name: 'Google ディスプレイ - リターゲティング',
-		platform: 'Google',
+		mediaId: 'media-001',
 		status: 'active',
 		budget: 1200000,
 		impressions: 3800000,
@@ -88,7 +88,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-008',
 		name: 'Instagram ストーリーズ - 期間限定オファー',
-		platform: 'Instagram',
+		mediaId: 'media-002',
 		status: 'completed',
 		budget: 600000,
 		impressions: 980000,
@@ -100,7 +100,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-009',
 		name: 'TikTok インフィード - アプリインストール',
-		platform: 'TikTok',
+		mediaId: 'media-003',
 		status: 'paused',
 		budget: 900000,
 		impressions: 1500000,
@@ -112,7 +112,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-010',
 		name: 'Facebook カルーセル - EC商品紹介',
-		platform: 'Facebook',
+		mediaId: 'media-004',
 		status: 'active',
 		budget: 750000,
 		impressions: 450000,
@@ -124,7 +124,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-011',
 		name: 'X タイムライン - キャンペーン告知',
-		platform: 'X',
+		mediaId: 'media-005',
 		status: 'completed',
 		budget: 300000,
 		impressions: 800000,
@@ -136,7 +136,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-012',
 		name: 'YouTube バンパー - 新サービス認知',
-		platform: 'YouTube',
+		mediaId: 'media-006',
 		status: 'active',
 		budget: 5000000,
 		impressions: 4200000,
@@ -148,7 +148,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-013',
 		name: 'Google ショッピング - 年末商戦',
-		platform: 'Google',
+		mediaId: 'media-001',
 		status: 'completed',
 		budget: 2500000,
 		impressions: 1800000,
@@ -160,7 +160,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-014',
 		name: 'Instagram フィード - ブランドストーリー',
-		platform: 'Instagram',
+		mediaId: 'media-002',
 		status: 'active',
 		budget: 1000000,
 		impressions: 1600000,
@@ -172,7 +172,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-015',
 		name: 'TikTok Spark Ads - UGC活用',
-		platform: 'TikTok',
+		mediaId: 'media-003',
 		status: 'active',
 		budget: 1800000,
 		impressions: 3200000,
@@ -184,7 +184,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-016',
 		name: 'Facebook 動画広告 - 採用ブランディング',
-		platform: 'Facebook',
+		mediaId: 'media-004',
 		status: 'completed',
 		budget: 400000,
 		impressions: 350000,
@@ -196,7 +196,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-017',
 		name: 'X スペース - ウェビナー集客',
-		platform: 'X',
+		mediaId: 'media-005',
 		status: 'paused',
 		budget: 200000,
 		impressions: 150000,
@@ -208,7 +208,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-018',
 		name: 'YouTube ディスカバリー - ハウツー動画',
-		platform: 'YouTube',
+		mediaId: 'media-006',
 		status: 'paused',
 		budget: 1500000,
 		impressions: 900000,
@@ -220,7 +220,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-019',
 		name: 'Google P-MAX - オムニチャネル',
-		platform: 'Google',
+		mediaId: 'media-001',
 		status: 'active',
 		budget: 3500000,
 		impressions: 2800000,
@@ -232,7 +232,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-020',
 		name: 'Instagram コラボ - インフルエンサー施策',
-		platform: 'Instagram',
+		mediaId: 'media-002',
 		status: 'paused',
 		budget: 2200000,
 		impressions: 1800000,
@@ -244,7 +244,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-021',
 		name: 'TikTok ブランドエフェクト - AR体験',
-		platform: 'TikTok',
+		mediaId: 'media-003',
 		status: 'completed',
 		budget: 4500000,
 		impressions: 3800000,
@@ -256,7 +256,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-022',
 		name: 'Facebook Messenger - カスタマーサポート',
-		platform: 'Facebook',
+		mediaId: 'media-004',
 		status: 'active',
 		budget: 50000,
 		impressions: 10000,
@@ -268,7 +268,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-023',
 		name: 'X トレンドテイクオーバー - 大型ローンチ',
-		platform: 'X',
+		mediaId: 'media-005',
 		status: 'completed',
 		budget: 4800000,
 		impressions: 4000000,
@@ -280,7 +280,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-024',
 		name: 'YouTube ショート - スナック動画',
-		platform: 'YouTube',
+		mediaId: 'media-006',
 		status: 'active',
 		budget: 700000,
 		impressions: 2200000,
@@ -292,7 +292,7 @@ export const mockCampaigns: Campaign[] = [
 	{
 		id: 'camp-025',
 		name: 'Google 検索 - 春の新生活キャンペーン',
-		platform: 'Google',
+		mediaId: 'media-001',
 		status: 'paused',
 		budget: 1800000,
 		impressions: 1200000,

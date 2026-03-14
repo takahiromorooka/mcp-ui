@@ -1,16 +1,21 @@
 import { Input } from './ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
+interface Media {
+	id: string
+	name: string
+}
+
 interface FilterBarProps {
+	media: Media[]
 	filterName: string
-	filterPlatform: string
+	filterMediaId: string
 	filterStatus: string
 	onNameChange: (value: string) => void
-	onPlatformChange: (value: string) => void
+	onMediaIdChange: (value: string) => void
 	onStatusChange: (value: string) => void
 }
 
-const platforms = ['Google', 'Instagram', 'TikTok', 'Facebook', 'X', 'YouTube'] as const
 const statuses = [
 	{ value: 'active', label: '配信中' },
 	{ value: 'paused', label: '一時停止' },
@@ -18,11 +23,12 @@ const statuses = [
 ] as const
 
 export function FilterBar({
+	media,
 	filterName,
-	filterPlatform,
+	filterMediaId,
 	filterStatus,
 	onNameChange,
-	onPlatformChange,
+	onMediaIdChange,
 	onStatusChange,
 }: FilterBarProps) {
 	return (
@@ -35,17 +41,17 @@ export function FilterBar({
 				className="min-w-[180px] flex-1 bg-background"
 			/>
 			<Select
-				value={filterPlatform || undefined}
-				onValueChange={(v) => onPlatformChange(v === '__all__' ? '' : v)}
+				value={filterMediaId || undefined}
+				onValueChange={(v) => onMediaIdChange(v === '__all__' ? '' : v)}
 			>
-				<SelectTrigger className="w-[150px] bg-background">
+				<SelectTrigger className="w-[180px] bg-background">
 					<SelectValue placeholder="全媒体" />
 				</SelectTrigger>
 				<SelectContent>
 					<SelectItem value="__all__">全媒体</SelectItem>
-					{platforms.map((p) => (
-						<SelectItem key={p} value={p}>
-							{p}
+					{media.map((m) => (
+						<SelectItem key={m.id} value={m.id}>
+							{m.name}
 						</SelectItem>
 					))}
 				</SelectContent>

@@ -43,6 +43,7 @@
 			"!**/dist",
 			"!**/.wrangler",
 			"!**/*.lock",
+			"!**/*.json",
 			"!**/src/ui/html.ts",
 			"!ecosystem.config.cjs"
 		]

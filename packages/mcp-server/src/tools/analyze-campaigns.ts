@@ -7,7 +7,8 @@ const RESOURCE_URI = 'ui://campaigns/list'
 interface Campaign {
 	id: string
 	name: string
-	platform: string
+	mediaId: string
+	mediaName: string
 	status: string
 	budget: number
 	impressions: number
@@ -20,7 +21,7 @@ interface Campaign {
 interface CampaignMetrics {
 	id: string
 	name: string
-	platform: string
+	mediaName: string
 	ctr: number
 	cvr: number
 	cpc: number
@@ -37,7 +38,7 @@ function calcMetrics(campaign: Campaign): CampaignMetrics {
 	return {
 		id: campaign.id,
 		name: campaign.name,
-		platform: campaign.platform,
+		mediaName: campaign.mediaName,
 		ctr: Math.round(ctr * 100) / 100,
 		cvr: Math.round(cvr * 100) / 100,
 		cpc: Math.round(cpc),
@@ -50,11 +51,11 @@ function calcMetrics(campaign: Campaign): CampaignMetrics {
 
 function buildTextSummary(metrics: CampaignMetrics[]): string {
 	const lines = ['キャンペーン分析結果:', '']
-	lines.push('| キャンペーン | プラットフォーム | CTR(%) | CVR(%) | CPC(円) | 予算 | CV数 |')
+	lines.push('| キャンペーン | 媒体 | CTR(%) | CVR(%) | CPC(円) | 予算 | CV数 |')
 	lines.push('|---|---|---|---|---|---|---|')
 	for (const m of metrics) {
 		lines.push(
-			`| ${m.name} | ${m.platform} | ${m.ctr} | ${m.cvr} | ¥${m.cpc.toLocaleString()} | ¥${m.budget.toLocaleString()} | ${m.conversions} |`,
+			`| ${m.name} | ${m.mediaName} | ${m.ctr} | ${m.cvr} | ¥${m.cpc.toLocaleString()} | ¥${m.budget.toLocaleString()} | ${m.conversions} |`,
 		)
 	}
 	return lines.join('\n')
@@ -68,6 +69,9 @@ export function registerAnalyzeCampaignsTool(server: McpServer, apiBaseUrl: stri
 			title: 'Analyze Ad Campaigns',
 			description:
 				'Analyze selected advertising campaigns. Calculates performance metrics (CTR, CVR, CPC) and returns chart data for visualization.',
+			annotations: {
+				readOnlyHint: true,
+			},
 			inputSchema: {
 				ids: z.string().describe('カンマ区切りのキャンペーンID'),
 			},

@@ -1,7 +1,8 @@
 interface Campaign {
 	id: string
 	name: string
-	platform: string
+	mediaId: string
+	mediaName: string
 	status: string
 	budget: number
 	impressions: number
@@ -11,16 +12,26 @@ interface Campaign {
 	endDate: string
 }
 
+interface Media {
+	id: string
+	name: string
+}
+
 /**
- * ツール結果からキャンペーン配列を安全にパースする。
+ * ツール結果からキャンペーン配列と媒体一覧を安全にパースする。
  * Claude/ChatGPT間のレスポンス形式差異（二重JSONエンコード等）に対応。
  */
-export function parseCampaigns(value: unknown): Campaign[] | null {
+export function parseCampaignsAndMedia(
+	value: unknown,
+): { campaigns: Campaign[]; media: Media[] } | null {
 	const data = typeof value === 'string' ? safeParse(value) : value
-	if (Array.isArray(data)) return data
+	if (Array.isArray(data)) return { campaigns: data, media: [] }
 	if (data && typeof data === 'object' && 'campaigns' in data) {
 		const campaigns = (data as { campaigns: unknown }).campaigns
-		if (Array.isArray(campaigns)) return campaigns
+		const media = 'media' in data ? ((data as { media: unknown }).media as Media[]) : []
+		if (Array.isArray(campaigns)) {
+			return { campaigns, media: Array.isArray(media) ? media : [] }
+		}
 	}
 	return null
 }
